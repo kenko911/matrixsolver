@@ -6,12 +6,12 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>854</width>
-    <height>450</height>
+    <width>499</width>
+    <height>297</height>
    </rect>
   </property>
   <property name="windowTitle">
-   <string>Умножение матрицы на время</string>
+   <string>Matrix Multiplication</string>
   </property>
   <widget class="QWidget" name="centralWidget">
    <layout class="QGridLayout" name="gridLayout">
@@ -31,7 +31,7 @@
        <font>
         <pointsize>36</pointsize>
         <weight>50</weight>
-        <italic>true</italic>
+        <italic>false</italic>
         <bold>false</bold>
        </font>
       </property>
@@ -80,13 +80,13 @@
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>854</width>
+     <width>499</width>
      <height>24</height>
     </rect>
    </property>
    <widget class="QMenu" name="menu">
     <property name="title">
-     <string>Файл</string>
+     <string>File</string>
     </property>
     <addaction name="actExit"/>
    </widget>
@@ -103,7 +103,7 @@
   <widget class="QStatusBar" name="statusBar"/>
   <action name="actExit">
    <property name="text">
-    <string>Выход</string>
+    <string>Quit</string>
    </property>
    <property name="shortcut">
     <string>Ctrl+Q</string>
@@ -112,5 +112,22 @@
  </widget>
  <layoutdefault spacing="6" margin="11"/>
  <resources/>
- <connections/>
+ <connections>
+  <connection>
+   <sender>actExit</sender>
+   <signal>triggered()</signal>
+   <receiver>MainWindow</receiver>
+   <slot>close()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>-1</x>
+     <y>-1</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>426</x>
+     <y>224</y>
+    </hint>
+   </hints>
+  </connection>
+ </connections>
 </ui>
