@@ -13,10 +13,13 @@ TEMPLATE = app
 linux-g++{
 INCLUDEPATH += /usr/include/eigen3
 }
+
 #macx Don't have OS X, although Victor does
 #win32(distribute eigen with sources?)
-
-
+win32{
+INCLUDEPATH += "C:/Program Files/Eigen/include/eigen3"
+CONFIG += console
+}
 SOURCES += main.cpp\
         mainwindow.cpp
 
