@@ -9,7 +9,7 @@ MainWindow::MainWindow(QWidget *parent) :
     _start(true)
 {
     ui->setupUi(this);
-    generateProblem(ui->cbTriangle->isChecked(), ui->sbDimension->value());
+    generateProblem(ui->cbType->currentIndex(), ui->sbDimension->value());
     t = new QTimer(this);
     connect(t, SIGNAL(timeout()), this, SLOT(updateCountdown()));
     connect(ui->cmdStart,SIGNAL(clicked()), this, SLOT(onStartButton()));
@@ -71,18 +71,15 @@ void MainWindow::switchStart(bool start)
 void MainWindow::startCompetition()
 {
     //everyone goes out of darkness!
-    generateProblem(ui->cbTriangle->isChecked(), ui->sbDimension->value());
+    generateProblem(ui->cbType->currentIndex(), ui->sbDimension->value());
     switchStart(false);
-    countdown = ui->sbDimension->value() == 2 ? 30 : 60;
+    countdown = ui->sbDimension->value() == 2 ? 60 : 90;
     t->start(1000);
 
 }
 
 void MainWindow::stopCompetition()
 {
-    static int calls  = 0;
-    calls++;
-    qDebug() << "calls to stopCompetition" << calls;
     t->stop();
     setEditsVisible(false);    switchStart(true);
     MatrixXi m = readAnswer();
@@ -95,8 +92,8 @@ void MainWindow::stopCompetition()
     {
         ui->labelRun->setText("FAIL!!!");
     }
-    std::cout << "Your answer: [ " << m << " ]" << std::endl;
-    std::cout << "Correct answer: [ " << ans <<" ]" << std::endl;
+    std::cout << "Your answer:" << std::endl << "[ " << m << " ]" << std::endl;
+    std::cout << "Correct answer:" << std::endl <<  "[ " << ans <<" ]" << std::endl;
     clearForm();
 
 }
@@ -123,32 +120,39 @@ void MainWindow::clearForm()
 
 }
 
-void MainWindow::generateProblem(bool triangle, int n)
+void MainWindow::generateProblem(int type, int n)
 { //Generates a matrix itself for solving
     input.resize(n, n);
     qsrand(time(0));
 
 
     for(int i = 0; i<n; ++i)
-    {
         for (int j = 0; j<n; ++j)
+            input(i, j) = static_cast<int>((10.0 * (qrand() / (RAND_MAX + 1.0)))) - 4; //Numerical Recipes in C, chapter 7
+
+    switch (type)
+    {
+        case 1: //upper => strictly lower is zeroes
+        input.triangularView<Eigen::StrictlyLower>().setZero();
+        break;
+        case 2: //strictly upper => lower is zeroes
+        input.triangularView<Eigen::Lower>().setZero();
+        break;
+    default: break;
+
+    }
+
+    for (int i = 0; i < n; ++i)
+        for (int j = 0; j < n; ++j)
         {
-            if ((i > j) && triangle)
-                input(i, j) = 0;
-            else
-                input(i, j) = qrand() % 21 -10;
 
             addProblemBox(i, j, input(i, j));
             if (i > 0 || j > 0)
-            {
                 setTabOrder(ui->layAnswer->itemAtPosition(j == 0 ? i-1 : i,
                                                           j == 0 ? input.cols() - 1 : j - 1
                                                                    )->widget(),
                             ui->layAnswer->itemAtPosition(i, j)->widget());
-
-            }
         }
-    }
 
   switchStart(true);
 }

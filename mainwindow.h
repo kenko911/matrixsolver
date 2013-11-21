@@ -21,7 +21,7 @@ private:
     Ui::MainWindow *ui;
     QTimer *t;
     MatrixXi input;
-    void generateProblem(bool triangle, int n);
+    void generateProblem(int type, int n);
     MatrixXi readAnswer(); //reads answer from user
     void clearForm(); //removes all textboxes
     void addProblemBox(int, int, int); //adds an textbox for matrix i/o to position (i, j) with value(3rd arg)
